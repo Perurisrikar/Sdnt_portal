@@ -1,6 +1,7 @@
 name: Daily Scraper and Upload
 
 on:
+push: 
   schedule:
     - cron: '30 6 * * *'  # 12:00 PM IST
     - cron: '30 9 * * *'  # 3:00 PM IST
