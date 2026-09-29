@@ -3,8 +3,8 @@ name: Daily Scraper and Upload
 on:
   push:
   schedule:
-    - cron: '30 6 * * *'
-    - cron: '30 9 * * *'
+    - cron: '35 6 * * *'  # 12:00 PM IST
+    - cron: '45 9 * * *'  # 3:00 PM IST
   workflow_dispatch:
 
 jobs:
@@ -34,6 +34,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /htdocs/data/
+          state-name: .ftp-deploy-sync-state-server1.json
           exclude: |
             **/*
             !attendance.json
@@ -48,6 +49,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME_2 }}
           password: ${{ secrets.FTP_PASSWORD_2 }}
           server-dir: /htdocs/data/
+          state-name: .ftp-deploy-sync-state-server2.json
           exclude: |
             **/*
             !attendance.json
