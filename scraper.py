@@ -11,7 +11,7 @@ PASSWORD = "vgnt"
 FROM_DATE = "2026-08-01"
 
 # Sections to fetch
-SECTIONS = ["CSM_D", "CSM_A","ME","CE","EIE"]
+SECTIONS = ["CSM_D", "CSM_A","ME","CE","EIE","CSE_A"]
 
 
 def get_india_date():
