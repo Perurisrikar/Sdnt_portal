@@ -11,7 +11,7 @@ PASSWORD = "vgnt"
 FROM_DATE = "2026-08-01"
 
 # Sections to fetch
-SECTIONS = ["CSM_D", "CSM_A","ME","CE","EIE","CSE_A"]
+SECTIONS = ["CSM_A", "CSM_B", "CSM_C", "CSM_D", "CSM_E","ME","CE","EIE","CSE_A", "CSE_B", "CSE_C", "CSE_D", "CSE_E"]
 
 # ============================================================
 # INDIA DATE
