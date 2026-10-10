@@ -1,15 +1,21 @@
 name: Daily Scraper and Upload
 
+# Triggered by cron-job.org (workflow_dispatch) at ~12:00 PM and ~3:15 PM IST.
+# The schedule below is only a backup; GitHub's own cron often runs late.
 on:
-  push:
-  schedule:
-    - cron: '35 6 * * *'  # 12:00 PM IST
-    - cron: '45 9 * * *'  # 3:00 PM IST
   workflow_dispatch:
+  schedule:
+    - cron: '35 6 * * *'   # 12:05 PM IST
+    - cron: '45 9 * * *'   # 3:15 PM IST
+
+concurrency:
+  group: scrape-and-deploy
+  cancel-in-progress: false
 
 jobs:
   scrape-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -17,11 +23,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: pip
 
-      - name: Install Python Libraries
+      - name: Install Python libraries
         run: pip install -r requirements.txt
 
-      - name: Run Scraper
+      - name: Run scraper
+        env:
+          MAX_WORKERS: '5'
+          VIGNAN_USER: ${{ secrets.VIGNAN_USER }}
+          VIGNAN_PASS: ${{ secrets.VIGNAN_PASS }}
         run: python scraper.py
 
       # =========================
@@ -33,11 +44,14 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./data/
           server-dir: /htdocs/data/
           state-name: .ftp-deploy-sync-state-server1.json
+          dangerous-clean-slate: false
           exclude: |
-            **/*
-            !attendance.json
+            **/.git*
+            **/.git*/**
+            .ftp-deploy-sync-state*.json
 
       # =========================
       # FTP SERVER 2
@@ -48,8 +62,11 @@ jobs:
           server: ${{ secrets.FTP_SERVER_2 }}
           username: ${{ secrets.FTP_USERNAME_2 }}
           password: ${{ secrets.FTP_PASSWORD_2 }}
+          local-dir: ./data/
           server-dir: /htdocs/data/
           state-name: .ftp-deploy-sync-state-server2.json
+          dangerous-clean-slate: false
           exclude: |
-            **/*
-            !attendance.json
+            **/.git*
+            **/.git*/**
+            .ftp-deploy-sync-state*.json
