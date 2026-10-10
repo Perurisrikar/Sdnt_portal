@@ -12,8 +12,8 @@ BASE_URL = "http://103.52.36.11/Attendance"
 
 # Credentials come from GitHub Secrets (VIGNAN_USER / VIGNAN_PASS) when set;
 # otherwise fall back to the values below so the script still runs as before.
-USERNAME = os.environ.get("VIGNAN_USER", "999")
-PASSWORD = os.environ.get("VIGNAN_PASS", "vgnt")
+USERNAME = os.environ.get("VIGNAN_USER") or "999"
+PASSWORD = os.environ.get("VIGNAN_PASS") or "vgnt"
 
 FROM_DATE = "2026-08-01"
 
@@ -23,7 +23,7 @@ SECTIONS = ["CSD_A", "CSD_B", "CSD_C", "CSD_D", "CSM_A", "CSM_B", "CSM_C", "CSM_
 # Sections scraped at once. Lower it (e.g. 3, or 1 for the old sequential
 # behaviour) if the portal starts rejecting logins. Override without editing:
 # set MAX_WORKERS in the workflow env.
-MAX_WORKERS = max(1, int(os.environ.get("MAX_WORKERS", "5")))
+MAX_WORKERS = max(1, int(os.environ.get("MAX_WORKERS") or "5"))
 
 # Attempts per section (each attempt logs in afresh), with growing pauses.
 MAX_ATTEMPTS = 3
